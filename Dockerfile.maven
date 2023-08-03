@@ -1,0 +1,19 @@
+FROM maven:latest as test
+
+COPY src /build/src
+COPY pom.xml /build/
+WORKDIR /build
+
+RUN mvn test
+
+FROM maven:latest as build
+COPY --from=test /build /build
+WORKDIR /build
+
+RUN mvn package
+
+FROM openjdk:latest
+
+COPY --from=build /build/target/accenture-techhub-0.0.1-SNAPSHOT.war /app/
+
+CMD ["java", "-jar", "/app/accenture-techhub-0.0.1-SNAPSHOT.war"]
