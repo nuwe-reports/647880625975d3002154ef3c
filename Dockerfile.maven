@@ -2,6 +2,7 @@ FROM maven:latest as test
 
 COPY src /build/src
 COPY pom.xml /build/
+
 WORKDIR /build
 
 RUN mvn test
